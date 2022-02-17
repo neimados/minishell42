@@ -28,6 +28,13 @@ static void	d_loop_echo(char *cmd, int *count)
 	}
 }
 
+int	d_echo_n(char **cmds)
+{
+	if (cmds[1][0] == '-' && cmds[1][1] == 'n')
+		return (1);
+	return (0);
+}
+
 void	ft_echo(char **cmds)
 {
 	int	i;
@@ -36,15 +43,12 @@ void	ft_echo(char **cmds)
 	int	count;
 
 	i = 1;
-	n = 0;
+	n = d_echo_n(cmds);
+	if (n == 1)
+		i = 2;
 	size = d_count_tab(cmds);
 	if (size == 1)
 		exit(EXIT_SUCCESS);
-	if (cmds[1][0] == '-' && cmds[1][1] == 'n')
-	{
-		n = 1;
-		i = 2;
-	}
 	while (cmds[i])
 	{
 		d_loop_echo(cmds[i], &count);

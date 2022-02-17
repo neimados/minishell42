@@ -52,6 +52,7 @@ struct s_parsing
 	int		j;
 	int		k;
 	int		l;
+	int		fd;
 	int		sign;
 	int		in;
 	int		out;
@@ -74,7 +75,16 @@ struct s_minishell
 // parsing
 void	ft_input(char **envp, t_minishell *mshell);
 void	ft_cp_env(char **envp, t_minishell *mshell);
+void	d_search_pwd(t_minishell *mshell);
+int		ft_chr_old(char **envp);
+int		d_search_shlvl(char **envp);
+void	d_cp_env_err(t_minishell *mshell);
 int		ft_parsing(char *input, t_minishell *mshell);
+void	d_check_pipe(char *input, t_minishell *mshell);
+int		d_open_pipe(t_minishell *mshell, int heredoc_num);
+int		d_pipe_error(char **tmp, t_cmds *cmd);
+int		d_pipe_error2(char **args, char *heredoc);
+int		d_pipe_return(char **tmp, char *input);
 char	**d_split(char *s, char c);
 void	freemalloc(char **strs);
 int		d_loop_countwords(char const *str, char c, int i);
@@ -111,6 +121,9 @@ char	*d_var_err(void);
 char	*d_loop_vars3(char *tmp, int i, t_minishell *mshell, char *str);
 int		d_skip_vars3(char *tmp, int i);
 int		d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell);
+int		d_args_in(char *arg, t_cmds *cmd, t_minishell *mshell, t_parsing *p);
+int		d_args_heredoc(char *arg, t_minishell *mshell, t_cmds *cmd, t_parsing *p);
+int		d_args_out(char *arg, t_cmds *cmd, t_minishell *mshell, t_parsing *p);
 void	d_putstr_fd(char *s, int fd);
 void	d_putchar_fd(char c, int fd);
 void	d_check_countwords(char c, int *i);

@@ -84,3 +84,26 @@ int	d_count_tab(char **tmp)
 		i++;
 	return (i);
 }
+
+void	d_check_pipe(char *input, t_minishell *mshell)
+{
+	int	i;
+
+	i = d_strlen(input) - 1;
+	while (input[i] == ' ')
+		i--;
+	while (i > 0)
+	{
+		if (input[i] == '|')
+		{
+			mshell->open_pipe = 1;
+			return ;
+		}
+		else
+		{
+			mshell->open_pipe = 0;
+			return ;
+		}
+	}
+	return ;
+}

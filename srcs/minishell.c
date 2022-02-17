@@ -12,6 +12,25 @@
 
 #include "../includes/minishell.h"
 
+static void	d_free_end(t_minishell *mshell, char *input)
+{
+	t_cmds	*test;
+
+	test = mshell->cmds;
+	while (test != NULL)
+	{
+		d_free_tab(test->cmd);
+		if (test->infile)
+			free(test->infile);
+		if (test->outfile)
+			free(test->outfile);
+		test = test->next;
+		free(mshell->cmds);
+		mshell->cmds = test;
+	}
+	free(input);
+}
+
 void	ft_input(char **envp, t_minishell *mshell)
 {
 	char	*input;
@@ -34,26 +53,11 @@ void	ft_input(char **envp, t_minishell *mshell)
 		{
 			k_loop_forks(mshell);
 		}
-		//TEST
-		t_cmds	*test;
-		test = mshell->cmds;
-		while (test != NULL)
-		{
-			d_free_tab(test->cmd);
-			if (test->infile)
-				free(test->infile);
-			if (test->outfile)
-				free(test->outfile);
-			test = test->next;
-			free(mshell->cmds);
-			mshell->cmds = test;
-		}
-		free(input);
-		//TEST
+		d_free_end(mshell, input);
 	}
 }
 
-int	main (int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_minishell			*mshell;
 
@@ -72,8 +76,6 @@ int	main (int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	ft_terminal(0);
-	// ft_block_signal(SIGQUIT);
-	// ft_signal(SIGINT, ft_handle_signal);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	ft_input(envp, mshell);

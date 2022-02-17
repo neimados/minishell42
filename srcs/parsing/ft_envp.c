@@ -12,61 +12,85 @@
 
 #include "../../includes/minishell.h"
 
-static void	d_cp_env_err(void)
+static char	*d_shlvl_return(t_minishell *mshell, int shlvl)
 {
-	write(2, "Malloc Error\n", 13);
-	exit(EXIT_FAILURE);
+	char	*tmp;
+	char	*nb;
+
+	tmp = d_strdup("SHLVL=");
+	if (!tmp)
+		d_cp_env_err(mshell);
+	nb = d_itoa(shlvl + 1);
+	tmp = d_strjoin(tmp, nb);
+	free(nb);
+	return (tmp);
 }
 
-static int	ft_search_oldpwd(char **envp)
+static char	*d_write_shlvl(t_minishell *mshell, char *env)
+{
+	char	*tmp;
+	int		length;
+	int		shlvl;
+
+	shlvl = 0;
+	length = d_strlen(env);
+	if (length != 6)
+	{
+		tmp = d_substr(env, 6, (length - 6));
+		if (!tmp)
+			d_cp_env_err(mshell);
+		shlvl = d_atoi(tmp);
+		free(tmp);
+		if (shlvl > 999)
+		{
+			d_putstr_fd("warning: shell level too high, resetting to 1\n", 2);
+			shlvl = 0;
+		}
+		else if (shlvl == 999)
+		{
+			tmp = d_strdup("SHLVL=");
+			return (tmp);
+		}
+	}
+	return (d_shlvl_return(mshell, shlvl));
+}
+
+static void	d_replace_lvl(t_minishell *mshell, char **envp)
 {
 	int	i;
-	int	count;
+	int	j;
 
 	i = 0;
-	count = 0;
+	j = -1;
 	while (envp[i])
 	{
 		if (envp[i][0] == 'O' && envp[i][1] == 'L' && envp[i][2] == 'D'
 		&& envp[i][3] == 'P' && envp[i][4] == 'W' && envp[i][5] == 'D'
 		&& envp[i][6] == '=')
-			count--;
-		count++;
-		i++;
+			i++;
+		else
+		{
+			if (envp[i][0] == 'S' && envp[i][1] == 'H' && envp[i][2] == 'L'
+			&& envp[i][3] == 'V' && envp[i][4] == 'L' && envp[i][5] == '=')
+				mshell->g_mini_env[++j] = d_write_shlvl(mshell, envp[i]);
+			else
+			{
+				mshell->g_mini_env[++j] = d_strdup(envp[i]);
+			}
+			if (!mshell->g_mini_env[j])
+				d_cp_env_err(mshell);
+			i++;
+		}
 	}
-	return (count);
 }
 
-static void	d_search_pwd(t_minishell *mshell)
-{
-	int		i;
-	char	*buffer;
-
-	i = 1;
-	buffer = d_calloc(i, sizeof(char));
-	if (!buffer)
-		return ;
-	while (buffer == NULL || buffer[0] == '\0')
-	{
-		free(buffer);
-		buffer = d_calloc(i, sizeof(char));
-		getcwd(buffer, i);
-		i++;
-	}
-	mshell->pwd = buffer;
-}
-
-void	ft_cp_env(char **envp, t_minishell *mshell)
+static void	d_create_lvl(t_minishell *mshell, char **envp)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	d_search_pwd(mshell);
-	mshell->g_mini_env = malloc(sizeof(char *) * (ft_search_oldpwd(envp) + 1));
-	if (!mshell->g_mini_env)
-		d_cp_env_err();
 	while (envp[i])
 	{
 		if (envp[i][0] == 'O' && envp[i][1] == 'L' && envp[i][2] == 'D'
@@ -77,10 +101,36 @@ void	ft_cp_env(char **envp, t_minishell *mshell)
 		{
 			mshell->g_mini_env[j] = d_strdup(envp[i]);
 			if (!mshell->g_mini_env[j])
-				d_cp_env_err();
-			i++;
-			j++;
+				d_cp_env_err(mshell);
 		}
+		i++;
+		j++;
 	}
-	mshell->g_mini_env[j] = 0;
+	mshell->g_mini_env[j] = d_strdup("SHLVL=1");
+}
+
+void	ft_cp_env(char **envp, t_minishell *mshell)
+{
+	int	lvl;
+	int	length;
+
+	lvl = d_search_shlvl(envp);
+	length = ft_chr_old(envp);
+	d_search_pwd(mshell);
+	if (lvl == 0)
+	{
+		mshell->g_mini_env = malloc(sizeof(char *) * (length + 2));
+		if (!mshell->g_mini_env)
+			d_cp_env_err(mshell);
+		d_create_lvl(mshell, envp);
+		mshell->g_mini_env[length + 1] = 0;
+	}
+	else
+	{
+		mshell->g_mini_env = malloc(sizeof(char *) * (length + 1));
+		if (!mshell->g_mini_env)
+			d_cp_env_err(mshell);
+		d_replace_lvl(mshell, envp);
+		mshell->g_mini_env[length] = 0;
+	}
 }
