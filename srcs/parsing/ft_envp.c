@@ -47,10 +47,9 @@ static char	*d_write_shlvl(t_minishell *mshell, char *env)
 			shlvl = 0;
 		}
 		else if (shlvl == 999)
-		{
-			tmp = d_strdup("SHLVL=");
-			return (tmp);
-		}
+			return (d_strdup("SHLVL="));
+		else if (shlvl < 0)
+			return (d_strdup("SHLVL=0"));
 	}
 	return (d_shlvl_return(mshell, shlvl));
 }
