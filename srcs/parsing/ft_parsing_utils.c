@@ -38,8 +38,10 @@ int	d_check_end(char *input)
 		j++;
 	if (i >= 0)
 	{
-		while (input[i] == ' ')
+		while (i >= 0 && input[i] == ' ')
 			i--;
+		if (i < 0)
+			return (1);
 		if (input[i] == '<' || input[i] == '>')
 		{
 			d_putstr_fd("syntax error near unexpected token 'newline'\n", 2);
