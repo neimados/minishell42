@@ -87,10 +87,23 @@ static char	**d_put_export(char *cmd, t_minishell *mshell)
 void	d_print_declare_export(t_minishell *mshell)
 {
 	int	i;
+	int	exist;
 
 	i = -1;
+	exist = 0;
 	while (mshell->g_mini_env[++i])
-		printf("declare -x %s\n", mshell->g_mini_env[i]);
+	{
+		if (mshell->g_mini_env[i][0] == 'O' && mshell->g_mini_env[i][1] == 'L'
+		&& mshell->g_mini_env[i][2] == 'D' && mshell->g_mini_env[i][3] == 'P'
+		&& mshell->g_mini_env[i][4] == 'W' && mshell->g_mini_env[i][5] == 'D'
+		&& mshell->g_mini_env[i][6] == '=')
+			exist = 1;
+	}
+	i = -1;
+	while (mshell->g_mini_env[++i])
+		d_loop_print_declare(mshell->g_mini_env[i]);
+	if (exist == 0)
+		printf("declare -x OLDPWD\n");
 	return ;
 }
 
