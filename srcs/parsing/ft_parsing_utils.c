@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:13:17 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 10:22:05 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/21 09:57:18 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ int	d_check_end(char *input)
 		j++;
 	if (i >= 0)
 	{
-		while (input[i] == ' ')
+		while (i >= 0 && input[i] == ' ')
 			i--;
+		if (i < 0)
+			return (1);
 		if (input[i] == '<' || input[i] == '>')
 		{
 			d_putstr_fd("syntax error near unexpected token 'newline'\n", 2);

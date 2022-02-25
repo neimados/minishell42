@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/12 16:32:43 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/24 12:31:17 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	d_check_digit(char *cmd)
 		i++;
 	while (cmd[i])
 	{
-		if (cmd[i] < '0' || cmd[i] > '9')
+		if ((cmd[i] < '0' || cmd[i] > '9') && cmd[i] != ' ')
 			return (1);
 		i++;
 	}
@@ -56,27 +56,49 @@ static void	d_exit_free(t_minishell *mshell)
 	d_free_tab(g_error);
 }
 
+static int	d_exit_arg(char *cmd)
+{
+	unsigned char	error;
+
+	error = 0;
+	if (d_check_digit(cmd) == 1)
+	{
+		d_putstr_fd("exit: ", 2);
+		d_putstr_fd(cmd, 2);
+		d_putstr_fd(": numeric argument required\n", 2);
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		g_error[0] = d_strdup("255");
+		error = 255;
+	}
+	else
+	{
+		error = d_atoi(cmd);
+		if (error)
+			while (error > 255)
+				error = error - 256;
+	}
+	return (error);
+}
+
 void	ft_exit(t_minishell *mshell, char **cmds)
 {
 	unsigned char	error;
 
 	error = d_atoi(g_error[0]);
-	if (cmds[1])
+	if (d_count_tab(cmds) > 2)
 	{
-		if (d_check_digit(cmds[1]) == 1)
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		g_error[0] = d_strdup("1");
+		if (d_check_digit(cmds[1]) == 0)
 		{
-			d_putstr_fd("exit: ", 2);
-			d_putstr_fd(cmds[1], 2);
-			d_putstr_fd(": numeric argument required\n", 2);
-			d_free_tab(g_error);
-			g_error = d_calloc(3, sizeof(char *));
-			g_error[0] = d_strdup("255");
+			d_putstr_fd("exit\nexit: too many arguments\n", 2);
+			return ;
 		}
-		error = d_atoi(cmds[1]);
-		if (error)
-			while (error > 255)
-				error = error - 256;
 	}
+	if (cmds[1])
+		error = d_exit_arg(cmds[1]);
 	d_exit_free(mshell);
 	exit(error);
 }

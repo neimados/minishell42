@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vars.c                                          :+:      :+:    :+:   */
+/*   ft_heredoc_vars.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/02 17:40:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/22 12:23:21 by dso              ###   ########.fr       */
+/*   Created: 2022/02/21 11:40:38 by dso               #+#    #+#             */
+/*   Updated: 2022/02/21 11:57:34 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*d_loop_vars(char *tmp, int i, char *str)
+static char	*d_loop_vars_hd(char *tmp, int i, char *str)
 {
 	int		start;
 	char	*carry;
 
 	start = i;
-	if (tmp[i] == '\'')
-	{
-		i++;
-		while (tmp[i] && tmp[i] != '\'')
-			i++;
-		i++;
-	}
-	else
-		while (tmp[i] && tmp[i] != '$')
+	while (tmp[i] && tmp[i] != '$')
 			i++;
 	carry = d_substr(tmp, start, i - start);
 	if (!carry)
@@ -38,22 +30,36 @@ char	*d_loop_vars(char *tmp, int i, char *str)
 	return (str);
 }
 
-int	d_skip_vars(char *tmp, int i)
+static char	*d_loop_vars3_hd(char *tmp, int i, t_minishell *mshell, char *str)
 {
-	if (tmp[i] == '\'')
+	int		start;
+	char	*variable;
+	char	*value;
+	int		j;
+
+	start = i;
+	j = 0;
+	while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"' && tmp[i] != ' ')
+		i++;
+	variable = d_substr(tmp, start, i - start);
+	while (mshell->g_mini_env[j])
 	{
-		i++;
-		while (tmp[i] && tmp[i] != '\'')
-			i++;
-		i++;
+		if (variable[0] == mshell->g_mini_env[j][0])
+		{
+			value = d_check_path(variable, mshell->g_mini_env[j]);
+			if (value)
+			{
+				str = d_strjoin(str, value);
+				free(value);
+			}
+		}
+	j++;
 	}
-	else
-		while (tmp[i] && tmp[i] != '$')
-			i++;
-	return (i);
+	free(variable);
+	return (str);
 }
 
-char	*d_loop_vars2(char *tmp, int i, char *str, t_minishell *mshell)
+static char	*d_loop_vars2_hd(char *tmp, int i, char *str, t_minishell *mshell)
 {
 	char	*value;
 
@@ -72,23 +78,11 @@ char	*d_loop_vars2(char *tmp, int i, char *str, t_minishell *mshell)
 		i++;
 	}
 	else
-		str = d_loop_vars3(tmp, i, mshell, str);
+		str = d_loop_vars3_hd(tmp, i, mshell, str);
 	return (str);
 }
 
-int	d_skip_vars2(char *tmp, int i)
-{	
-	i++;
-	if (tmp[i] >= '0' && tmp[i] <= '9')
-		i++;
-	if (tmp[i] == '?')
-		i++;
-	else
-		i = d_skip_vars3(tmp, i);
-	return (i);
-}
-
-char	*d_check_vars(char *tmp, t_minishell *mshell)
+char	*d_check_vars2(char *tmp, t_minishell *mshell)
 {
 	char	*str;
 	int		i;
@@ -101,17 +95,17 @@ char	*d_check_vars(char *tmp, t_minishell *mshell)
 	{
 		if (tmp[i] != '$')
 		{
-			str = d_loop_vars(tmp, i, str);
+			str = d_loop_vars_hd(tmp, i, str);
 			if (!str)
 				return (NULL);
-			i = d_skip_vars(tmp, i);
+			i = d_skip_vars_hd(tmp, i);
 		}
 		else
 		{
-			str = d_loop_vars2(tmp, i, str, mshell);
+			str = d_loop_vars2_hd(tmp, i, str, mshell);
 			if (!str)
 				return (NULL);
-			i = d_skip_vars2(tmp, i);
+			i = d_skip_vars2_hd(tmp, i);
 		}
 	}
 	return (str);

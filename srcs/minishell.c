@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/02/14 18:24:31 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/18 14:47:24 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ static void	d_free_end(t_minishell *mshell, char *input)
 	free(input);
 }
 
+static void	d_input_null(t_minishell *mshell)
+{
+	printf("\b\bexit\n");
+	free(mshell->pwd);
+	d_free_tab(mshell->g_mini_env);
+	free(mshell);
+	d_free_tab(g_error);
+	exit(EXIT_SUCCESS);
+}
+
 void	ft_input(char **envp, t_minishell *mshell)
 {
 	char	*input;
@@ -41,17 +51,15 @@ void	ft_input(char **envp, t_minishell *mshell)
 		input = readline("\x1b[34m""minishell$> ""\x1b[34m");
 		add_history(input);
 		if (input == NULL)
+			d_input_null(mshell);
+		if (ft_parsing(input, mshell) == 0 && mshell->cmds)
 		{
-			printf("\b\bexit\n");
-			free(mshell->pwd);
-			d_free_tab(mshell->g_mini_env);
-			free(mshell);
-			d_free_tab(g_error);
-			exit(EXIT_SUCCESS);
-		}
-		if (ft_parsing(input, mshell) == 0)
-		{
-			k_loop_forks(mshell);
+			if (mshell->cmds->cmd[0])
+			{
+				k_loop_forks(mshell);
+				signal(SIGINT, sigint_handler);
+				ft_terminal(0);
+			}
 		}
 		d_free_end(mshell, input);
 	}

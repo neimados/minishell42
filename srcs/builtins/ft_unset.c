@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:02:16 by dso               #+#    #+#             */
-/*   Updated: 2022/02/08 12:20:34 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/22 14:18:42 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,21 +99,23 @@ void	ft_unset(char **cmds, t_minishell *mshell)
 	int	j;
 	int	count;
 
-	i = 1;
+	i = 0;
 	j = 0;
 	count = 0;
-	while (cmds[i])
+	while (cmds[++i])
 	{
-		while (cmds[i][j])
+		if (strlen(cmds[i]) != 1 && cmds[i][0] != '_')
 		{
-			if (cmds[i][j] != '\'' && cmds[i][j] != '\"')
-				count++;
-			j++;
+			while (cmds[i][j])
+			{
+				if (cmds[i][j] != '\'' && cmds[i][j] != '\"')
+					count++;
+				j++;
+			}
+			if (count != 0)
+				if (d_put_unset(count, cmds[i], mshell) == 1)
+					return ;
 		}
-		if (count != 0)
-			if (d_put_unset(count, cmds[i], mshell) == 1)
-				return ;
-		i++;
 		j = 0;
 		count = 0;
 	}

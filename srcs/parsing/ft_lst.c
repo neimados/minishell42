@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 11:11:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/11 16:51:16 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/22 11:33:07 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	*d_add_cmds(t_minishell *mshell, t_cmds *cmd)
 	t_cmds	*tmp;
 
 	tmp = mshell->cmds;
+	d_check_underscore(cmd, mshell);
 	if (mshell->cmds == NULL)
 		mshell->cmds = cmd;
 	else

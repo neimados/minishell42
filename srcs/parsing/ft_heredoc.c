@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:38:58 by dso               #+#    #+#             */
-/*   Updated: 2022/02/15 11:40:41 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/21 11:53:11 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	d_heredoc_child(char *stop, int quotes, int fd, t_minishell *mshell)
 		}
 		if (quotes == 0)
 		{
-			str = d_check_vars(input, mshell);
+			str = d_check_vars2(input, mshell);
 			d_putstr_fd(str, fd);
 			free(str);
 		}

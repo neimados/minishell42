@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 11:00:43 by dso               #+#    #+#             */
-/*   Updated: 2022/02/14 13:30:44 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/22 12:30:44 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,17 @@ static void	d_loop_echo(char *cmd, int *count)
 	}
 }
 
-int	d_echo_n(char **cmds)
+static int	d_echo_n(char **cmds)
 {
 	if (cmds[1][0] == '-' && cmds[1][1] == 'n')
 		return (1);
 	return (0);
+}
+
+static void	d_check_echo(void)
+{
+	printf("\n");
+	exit(EXIT_SUCCESS);
 }
 
 void	ft_echo(char **cmds)
@@ -43,12 +49,14 @@ void	ft_echo(char **cmds)
 	int	count;
 
 	i = 1;
+	if (!cmds[1])
+		d_check_echo();
 	n = d_echo_n(cmds);
-	if (n == 1)
-		i = 2;
 	size = d_count_tab(cmds);
 	if (size == 1)
 		exit(EXIT_SUCCESS);
+	if (n == 1)
+		i = 2;
 	while (cmds[i])
 	{
 		d_loop_echo(cmds[i], &count);
