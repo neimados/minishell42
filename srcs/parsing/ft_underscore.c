@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 11:33:21 by dso               #+#    #+#             */
-/*   Updated: 2022/02/23 13:24:36 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 14:47:57 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	d_check_underscore(t_cmds *cmd, t_minishell *m)
 
 	i = 0;
 	j = 0;
+	if (!cmd->cmd[0])
+		return ;
 	while (cmd->cmd[i])
 		i++;
 	i--;

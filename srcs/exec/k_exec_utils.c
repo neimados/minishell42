@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 11:59:19 by dso               #+#    #+#             */
-/*   Updated: 2022/02/18 13:27:57 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 16:18:31 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ void	ft_error(char *str1, char *str2)
 	write(2, "minishell: ", 11);
 	write(2, str1, ft_strlen(str1));
 	if (str2)
+	{
 		write(2, ": ", 2);
-	write(2, str2, ft_strlen(str2));
+		write(2, str2, ft_strlen(str2));
+	}
 	write(2, "\n", 1);
 	if (!d_strncmp(g_error[0], "127", 3))
 		exit(127);
@@ -78,23 +80,27 @@ int	k_create_forks(int nbcmd, t_cmds *tmp, t_minishell *minishell, pid_t *forks)
 	i = 0;
 	while (i < nbcmd)
 	{
-		if (tmp->next)
-			pipe(tmp->next->pipe);
-		forks[i] = fork();
-		if (forks[i] == 0)
+		if (tmp->cmd[0])
 		{
-			if (tmp->next && !tmp->next->next)
-				close(tmp->next->pipe[0]);
-			k_child(minishell, i);
+			printf("test i == %s\n", tmp->cmd[0]);
+			if (tmp->next && tmp->next->cmd[0])
+				pipe(tmp->next->pipe);
+			forks[i] = fork();
+			if (forks[i] == 0)
+			{
+				if (tmp->next && !tmp->next->next)
+					close(tmp->next->pipe[0]);
+				k_child(minishell, i);
+			}
+			g_error[1] = d_strjoin(g_error[1], " ");
+			pidtmp = d_itoa(forks[i]);
+			if (!pidtmp)
+				return (-1);
+			g_error[1] = d_strjoin(g_error[1], pidtmp);
+			free(pidtmp);
+			i++;
 		}
-		g_error[1] = d_strjoin(g_error[1], " ");
-		pidtmp = d_itoa(forks[i]);
-		if (!pidtmp)
-			return (-1);
-		g_error[1] = d_strjoin(g_error[1], pidtmp);
-		free(pidtmp);
 		tmp = tmp->next;
-		i++;
 	}
 	return (i);
 }

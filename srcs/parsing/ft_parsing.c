@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/16 15:55:11 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 15:28:55 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,24 @@ static int	d_parsing_pipe(t_minishell *mshell, int i, char **tmp)
 			return (1);
 		i++;
 	}
+	// int	j = 0;
+	// t_cmds *test;
+	// test = mshell->cmds;
+	// while (test)
+	// {
+	// 	j = 0;
+	// 	while (test->cmd[j])
+	// 	{
+	// 		printf("cmd : %s\n", test->cmd[j]);
+	// 		j++;
+	// 	}
+	// 	printf("type : %d\n", test->type);
+	// 	printf("infile : %s\n", test->infile);
+	// 	printf("outfile : %s\n", test->outfile);
+	// 	printf("\n");
+	// 	test = test->next;
+	// }
+	// exit(0);
 	return (0);
 }
 
@@ -70,7 +88,8 @@ int	ft_parsing(char *input, t_minishell *mshell)
 	while (tmp[i])
 	{
 		cmd = d_init_cmds();
-		if (!cmd)
+		tmp[i] = d_check_vars(tmp[i], mshell);
+		if (!cmd || !tmp[i])
 			return (1);
 		if (d_parsing_args(mshell, cmd, tmp[i], i) == 1)
 			return (d_pipe_error(tmp, cmd));

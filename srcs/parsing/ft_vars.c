@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:40:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/22 12:23:21 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 14:41:49 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,6 @@ char	*d_check_vars(char *tmp, t_minishell *mshell)
 			i = d_skip_vars2(tmp, i);
 		}
 	}
+	free(tmp);
 	return (str);
 }

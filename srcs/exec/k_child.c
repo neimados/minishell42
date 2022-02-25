@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 15:49:50 by dso               #+#    #+#             */
-/*   Updated: 2022/02/18 16:26:23 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 16:22:32 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,19 @@ void	k_child_main(t_cmds	*tmp, t_minishell *minishell, int i)
 		k_child_outfile(tmp);
 		if (tmp->next)
 		{
-			if (dup2(tmp->next->pipe[1], STDOUT_FILENO) == -1)
-				ft_error(strerror(errno), NULL);
-			close(tmp->next->pipe[1]);
+			while (tmp->next && tmp->next->pipe[1] < 0)
+				tmp = tmp->next;
+			if (tmp->next && tmp->next->pipe[1] > 1)
+			{
+				if (dup2(tmp->next->pipe[1], STDOUT_FILENO) == -1)
+					ft_error(strerror(errno), NULL);
+				close(tmp->next->pipe[1]);
+			}
 		}
-		k_is_builtin_fct(tmp->cmd, minishell);
+		if (tmp->cmd[0])
+			k_is_builtin_fct(tmp->cmd, minishell);
+		else
+			exit (0);
 	}
 }
 

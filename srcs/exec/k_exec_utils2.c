@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 14:37:42 by dso               #+#    #+#             */
-/*   Updated: 2022/02/18 15:46:19 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 15:41:05 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	k_count_cmds(t_cmds *tmp)
 	tmp2 = tmp;
 	while (tmp2)
 	{
-		nbcmd++;
+		if (tmp2->cmd[0])
+			nbcmd++;
 		tmp2 = tmp2->next;
 	}
 	return (nbcmd);

@@ -23,7 +23,7 @@ SRC = ./srcs/minishell.c ./srcs/parsing/ft_parsing.c ./srcs/parsing/utils.c \
 OBJS = ${SRC:.c=.o}
 
 CC		= gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
 READLINE_LIB	=	-L$(shell brew --prefix readline)/lib
 READLINE_INC	=	-I$(shell brew --prefix readline)/include

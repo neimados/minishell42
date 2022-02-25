@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/16 18:00:13 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 13:28:17 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ static int	d_loop_args(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 	return (end);
 }
 
-static int	d_args_return(char **args, t_cmds *c, t_minishell *m, int end)
+static int	d_args_return(char **args, t_cmds *c, int end)
 {
-	if (d_put_cmds(args, c, m) == 1)
+	if (d_put_cmds(args, c) == 1)
 		return (1);
 	if (end == 1)
 	{
@@ -100,5 +100,5 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 			return (1);
 		i++;
 	}
-	return (d_args_return(args, cmd, mshell, p.end));
+	return (d_args_return(args, cmd, p.end));
 }

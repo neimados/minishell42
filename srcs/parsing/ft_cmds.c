@@ -6,29 +6,24 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/15 16:19:28 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 13:27:11 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*d_write_cmd(char *arg, t_parsing *p, t_minishell *m, t_cmds *c)
+static char	*d_write_cmd(char *arg, t_parsing *p, t_cmds *c)
 {
 	int		j;
 	int		k;
 	char	*tmp;
-	char	*to_trim;
 
 	j = p->j;
 	k = p->k;
 	tmp = d_substr(arg, 0, j);
 	if (!tmp)
 		return (NULL);
-	to_trim = d_check_vars(tmp, m);
-	if (!to_trim)
-		return (NULL);
-	free(tmp);
-	c->cmd[k] = d_trim_cmd(to_trim);
+	c->cmd[k] = d_trim_cmd(tmp);
 	if (!c->cmd[k])
 		return (NULL);
 	return (c->cmd[k]);
@@ -53,7 +48,7 @@ static int	d_skip_cmds(t_parsing *p, char *arg)
 	return (j);
 }
 
-static int	d_loop_put_cmds(t_parsing *p, char *arg, t_minishell *m, t_cmds *c)
+static int	d_loop_put_cmds(t_parsing *p, char *arg, t_cmds *c)
 {
 	t_parsing	pp;
 	int			sign;
@@ -65,7 +60,7 @@ static int	d_loop_put_cmds(t_parsing *p, char *arg, t_minishell *m, t_cmds *c)
 	k = p->k;
 	if (sign == 0)
 	{
-		c->cmd[k] = d_write_cmd(arg, &pp, m, c);
+		c->cmd[k] = d_write_cmd(arg, &pp, c);
 		if (!c->cmd[k])
 			return (-1);
 		k++;
@@ -73,7 +68,7 @@ static int	d_loop_put_cmds(t_parsing *p, char *arg, t_minishell *m, t_cmds *c)
 	return (k);
 }
 
-int	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell)
+int	d_put_cmds(char **args, t_cmds *cmd)
 {
 	t_parsing	p;
 
@@ -90,7 +85,7 @@ int	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell)
 			else
 			{
 				p.j = d_skip_cmds(&p, args[p.i]);
-				p.k = d_loop_put_cmds(&p, args[p.i], mshell, cmd);
+				p.k = d_loop_put_cmds(&p, args[p.i], cmd);
 				if (p.k == -1)
 					return (1);
 				p.sign = 0;

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/23 18:11:30 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 13:27:40 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int		d_count_tab(char **tmp);
 int		d_check_quotes(char *input, t_minishell *mshell);
 int		d_check_end(char *input);
 int		d_count_cmds(char **args);
-int		d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell);
+int		d_put_cmds(char **args, t_cmds *cmd);
 char	*d_trim_cmd(char *to_trim);
 char	*d_create_heredoc(int i);
 int		d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell);

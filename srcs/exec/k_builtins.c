@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 11:58:40 by dso               #+#    #+#             */
-/*   Updated: 2022/02/21 11:23:54 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/25 15:34:14 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	k_is_builtin_fct(char **cmd, t_minishell *minishell)
 {
 	int	len;
 
+	if (!cmd[0])
+		return ;
 	len = d_strlen(cmd[0]);
 	if (!d_strncmp(cmd[0], "echo", len) || !d_strncmp(cmd[0], "cd", len)
 		|| !d_strncmp(cmd[0], "pwd", len) || !d_strncmp(cmd[0], "export", len)
