@@ -175,7 +175,6 @@ void	ft_exit(t_minishell *mshell, char **cmds);
 void	ft_env(char **cmds, t_minishell *mshell);
 void	ft_echo(char **cmds);
 void	ft_export(char **cmds, t_minishell *mshell);
-void	d_loop_print_declare(char *line);
 void	ft_cd(char **cmds, t_minishell *mshell);
 void	ft_unset(char **cmds, t_minishell *mshell);
 void	d_print_declare_export(t_minishell *mshell);
