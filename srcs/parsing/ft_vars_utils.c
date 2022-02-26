@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 11:56:43 by dso               #+#    #+#             */
-/*   Updated: 2022/02/22 12:23:14 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/26 11:58:27 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,16 @@ char	*d_loop_vars3(char *tmp, int i, t_minishell *mshell, char *str)
 int	d_skip_vars3(char *tmp, int i)
 {
 	while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"' && tmp[i] != ' ')
+		i++;
+	return (i);
+}
+
+int	d_loop_vars_if(char *tmp, int i)
+{
+	i++;
+	while (tmp[i] && tmp[i] != '\'')
+		i++;
+	if (tmp[i])
 		i++;
 	return (i);
 }

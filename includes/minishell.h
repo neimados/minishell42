@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 13:27:40 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/26 12:11:50 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int		d_fork_error_heredoc(char *stop);
 char	*d_check_vars(char *tmp, t_minishell *mshell);
 char	*d_check_path(char *variable, char *env);
 char	*d_var_err(void);
+int		d_loop_vars_if(char *tmp, int i);
 char	*d_loop_vars3(char *tmp, int i, t_minishell *mshell, char *str);
 int		d_skip_vars3(char *tmp, int i);
 int		d_put_args(char **args, t_cmds *cmd,
@@ -198,6 +199,8 @@ int		k_dotdot2(t_minishell *minishell, int j);
 void	k_free_end(char *old, char **tmp2, char *pwd);
 int		k_cd_oldpwd(t_minishell *minishell, char *old);
 int		k_cd_dash_loop(int j, t_minishell *m, int i);
+void	k_set_gerror(void);
+void	k_child_error_exit(t_cmds *tmp);
 
 //signals
 void	ft_terminal(int echo);

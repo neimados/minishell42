@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 15:49:50 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 16:22:32 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/26 12:12:09 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	k_child_dup(t_cmds *tmp, int in, int out)
 	{
 		in = open(tmp->infile, O_RDONLY);
 		if (in == -1)
-			ft_error(strerror(errno), tmp->infile);
+			k_child_error_exit(tmp);
 		if (dup2(in, STDIN_FILENO) == -1)
 			ft_error(strerror(errno), NULL);
 		close(in);
@@ -50,7 +50,10 @@ void	k_child_infile(t_cmds *tmp, int i)
 		close(tmp->pipe[0]);
 		fd_in = open(tmp->infile, O_RDONLY);
 		if (fd_in == -1)
+		{
+			k_set_gerror();
 			ft_error(strerror(errno), tmp->infile);
+		}
 		if (dup2(fd_in, STDIN_FILENO) == -1)
 			ft_error(strerror(errno), NULL);
 		close(fd_in);

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:40:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 14:41:49 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/26 11:59:00 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,16 @@ char	*d_loop_vars(char *tmp, int i, char *str)
 	char	*carry;
 
 	start = i;
-	if (tmp[i] == '\'')
+	if (tmp[i] == '\"')
 	{
 		i++;
-		while (tmp[i] && tmp[i] != '\'')
-			i++;
-		i++;
-	}
-	else
 		while (tmp[i] && tmp[i] != '$')
+			i++;
+	}
+	if (tmp[i] == '\'')
+		i = d_loop_vars_if(tmp, i);
+	else
+		while (tmp[i] && tmp[i] != '$' && tmp[i] != '\'' && tmp[i] != '\"')
 			i++;
 	carry = d_substr(tmp, start, i - start);
 	if (!carry)
@@ -40,15 +41,22 @@ char	*d_loop_vars(char *tmp, int i, char *str)
 
 int	d_skip_vars(char *tmp, int i)
 {
-	if (tmp[i] == '\'')
+	if (tmp[i] == '\"')
+	{
+		i++;
+		while (tmp[i] && tmp[i] != '$')
+			i++;
+	}
+	else if (tmp[i] == '\'')
 	{
 		i++;
 		while (tmp[i] && tmp[i] != '\'')
 			i++;
-		i++;
+		if (tmp[i])
+			i++;
 	}
 	else
-		while (tmp[i] && tmp[i] != '$')
+		while (tmp[i] && tmp[i] != '$' && tmp[i] != '\'' && tmp[i] != '\"')
 			i++;
 	return (i);
 }
@@ -102,17 +110,15 @@ char	*d_check_vars(char *tmp, t_minishell *mshell)
 		if (tmp[i] != '$')
 		{
 			str = d_loop_vars(tmp, i, str);
-			if (!str)
-				return (NULL);
 			i = d_skip_vars(tmp, i);
 		}
 		else
 		{
 			str = d_loop_vars2(tmp, i, str, mshell);
-			if (!str)
-				return (NULL);
 			i = d_skip_vars2(tmp, i);
 		}
+		if (!str)
+			return (NULL);
 	}
 	free(tmp);
 	return (str);
