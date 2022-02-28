@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   k_exec.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 17:05:49 by kmammeri          #+#    #+#             */
-/*   Updated: 2022/02/25 18:49:31 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 14:54:37 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,16 @@ void	k_loop_forks(t_minishell *minishell)
 	tmp = minishell->cmds;
 	tmp2 = tmp;
 	nbcmd = k_count_cmds(tmp);
-	i = d_strlen(tmp->cmd[0]);
-	if (k_loop_forks_check(nbcmd, minishell, tmp, i) == 1)
-		return ;
-	k_set_signals(nbcmd, tmp, i);
+	if (tmp->cmd[0])
+	{
+		i = d_strlen(tmp->cmd[0]);
+		if (k_loop_forks_check(nbcmd, minishell, tmp, i) == 1)
+			return ;
+		k_set_signals(nbcmd, tmp, i);
+	}
 	forks = malloc(sizeof(pid_t) * nbcmd);
 	if (!forks)
-	{
-		d_putstr_fd("minishell: fork failed\n", 2);
-		return ;
-	}
+		return (d_putstr_fd("minishell: fork failed\n", 2));
 	i = k_create_forks(nbcmd, tmp, minishell, forks);
 	if (i == -1)
 		return ;

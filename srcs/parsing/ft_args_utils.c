@@ -6,19 +6,19 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 18:42:32 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 14:51:31 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 16:25:01 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static	int	d_args_out2(t_minishell *mshell, t_cmds *cmd, char *tmp)
+static	int	d_args_out2(t_cmds *cmd, char *tmp)
 {
 	if (!tmp)
 		return (1);
 	if (cmd->outfile)
 		free(cmd->outfile);
-	cmd->outfile = d_check_vars(tmp, mshell);
+	cmd->outfile = tmp;
 	if (!cmd->outfile)
 		return (1);
 	return (0);
@@ -29,11 +29,12 @@ int	d_args_out(char *arg, t_cmds *cmd, t_minishell *mshell, t_parsing *p)
 	char	*tmp;
 	int		end;
 
+	(void)mshell;
 	end = p->end;
 	if (p->end != 0)
 		return (1);
 	tmp = d_substr(arg, p->start, p->i - p->start);
-	if (d_args_out2(mshell, cmd, tmp) == 1)
+	if (d_args_out2(cmd, tmp) == 1)
 		return (-1);
 	if (p->out == 1)
 	{
@@ -85,7 +86,7 @@ int	d_args_in(char *arg, t_cmds *cmd, t_minishell *mshell, t_parsing *p)
 			return (-1);
 		if (cmd->infile)
 			free(cmd->infile);
-		cmd->infile = d_check_vars(tmp, mshell);
+		cmd->infile = tmp;
 		p->fd = open(cmd->infile, O_RDONLY);
 		if (p->fd == -1)
 			end = 1;

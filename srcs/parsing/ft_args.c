@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 18:26:59 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 18:59:26 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,25 @@ static int	d_loop_args2(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 	return (end);
 }
 
+static int	d_loop_args_quotes(char *arg, int i)
+{
+	if (arg[i] == '\'')
+	{
+		i++;
+		while (arg[i] && arg[i] != '\'')
+			i++;
+		i++;
+	}
+	else if (arg[i] == '\"')
+	{
+		i++;
+		while (arg[i] && arg[i] != '\"')
+			i++;
+		i++;
+	}
+	return (i);
+}
+
 static int	d_loop_args(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 {
 	int	i;
@@ -46,7 +65,9 @@ static int	d_loop_args(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 	end = p->end;
 	while (arg[i])
 	{
-		if (arg[i] == '<' || arg[i] == '>')
+		if (arg[i] == '\'' || arg[i] == '\"')
+			i = d_loop_args_quotes(arg, i);
+		else if (arg[i] == '<' || arg[i] == '>')
 		{
 			if (arg[i] == '<')
 				p->in += 1;

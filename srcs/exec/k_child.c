@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   k_child.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 15:49:50 by dso               #+#    #+#             */
-/*   Updated: 2022/02/26 12:12:09 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/26 12:47:35 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	k_child_main(t_cmds	*tmp, t_minishell *minishell, int i)
 		{
 			while (tmp->next && tmp->next->pipe[1] < 0)
 				tmp = tmp->next;
-			if (tmp->next && tmp->next->pipe[1] > 1)
+			if (tmp->next && tmp->cmd[0] && tmp->next->pipe[1] > 1)
 			{
 				if (dup2(tmp->next->pipe[1], STDOUT_FILENO) == -1)
 					ft_error(strerror(errno), NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/24 12:31:17 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/26 14:47:03 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ static void	d_loop_free_exit(t_minishell *mshell)
 	}
 }
 
-static void	d_exit_free(t_minishell *mshell)
+static void	d_exit_free(t_minishell *mshell, int key)
 {
 	d_loop_free_exit(mshell);
-	printf("\b\bexit\n");
+	if (key == 0)
+		printf("\b\bexit\n");
 	free(mshell->pwd);
 	d_free_tab(mshell->g_mini_env);
 	free(mshell);
@@ -81,7 +82,7 @@ static int	d_exit_arg(char *cmd)
 	return (error);
 }
 
-void	ft_exit(t_minishell *mshell, char **cmds)
+void	ft_exit(t_minishell *mshell, char **cmds, int key)
 {
 	unsigned char	error;
 
@@ -99,6 +100,6 @@ void	ft_exit(t_minishell *mshell, char **cmds)
 	}
 	if (cmds[1])
 		error = d_exit_arg(cmds[1]);
-	d_exit_free(mshell);
+	d_exit_free(mshell, key);
 	exit(error);
 }

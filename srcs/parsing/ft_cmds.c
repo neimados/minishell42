@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 13:27:11 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 19:37:29 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,13 @@ static char	*d_write_cmd(char *arg, t_parsing *p, t_cmds *c)
 	tmp = d_substr(arg, 0, j);
 	if (!tmp)
 		return (NULL);
-	c->cmd[k] = d_trim_cmd(tmp);
+	// tmp = ft_strtrim(tmp, "\"");
+	// if (!tmp)
+	// 	return (NULL);
+	// tmp = ft_strtrim(tmp, "\'");
+	// if (!tmp)
+	// 	return (NULL);
+	c->cmd[k] = tmp;
 	if (!c->cmd[k])
 		return (NULL);
 	return (c->cmd[k]);
@@ -36,15 +42,29 @@ static void	d_init_struct_parsing(t_parsing *p)
 	p->k = 0;
 	p->l = 0;
 	p->sign = 0;
+	p->sq = 0;
+	p->dq = 0;
 }
 
 static int	d_skip_cmds(t_parsing *p, char *arg)
 {
 	int	j;
+	int	sq;
+	int	dq;
 
 	j = p->j;
-	while (arg[j] && arg[j] != '>' && arg[j] != '<')
+	sq = 0;
+	dq = 0;
+	while (arg[j])
+	{
+		if (arg[j] == '\'' && dq % 2 == 0)
+			sq++;
+		else if (arg[j] == '\"' && sq % 2 == 0)
+			dq++;
+		if ((arg[j] == '>' || arg[j] == '<') && (sq % 2 == 0 && dq % 2 == 0))
+			return (j);
 		j++;
+	}
 	return (j);
 }
 
@@ -77,7 +97,12 @@ int	d_put_cmds(char **args, t_cmds *cmd)
 	{
 		while (args[p.i][p.j])
 		{
-			if (args[p.i][p.j] == '>' || args[p.i][p.j] == '<')
+			if (args[p.i][p.j] == '\'' && p.dq % 2 == 0)
+				p.sq += 1;
+			else if (args[p.i][p.j] == '\"' && p.sq % 2 == 0)
+				p.dq += 1;
+			if ((args[p.i][p.j] == '>' || args[p.i][p.j] == '<')
+				&& (p.sq % 2 == 0 && p.dq % 2 == 0))
 			{
 				p.sign += 1;
 				p.j += 1;

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 18:42:56 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 16:59:47 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	ft_input(char **envp, t_minishell *mshell)
 			d_input_null(mshell);
 		if (ft_parsing(input, mshell) == 0 && mshell->cmds)
 		{
-			if (mshell->cmds->cmd[0])
+			if (mshell->cmds->cmd)
 			{
 				k_loop_forks(mshell);
 				signal(SIGINT, sigint_handler);

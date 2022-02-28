@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/26 12:02:03 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 19:40:28 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,21 @@ static int	d_parsing_args(t_minishell *mshell, t_cmds *cmd, char *tmp, int i)
 
 static int	d_parsing_pipe(t_minishell *mshell, int i, char **tmp)
 {
+	t_cmds	*tmp2;
+
 	d_free_tab(tmp);
 	while (mshell->open_pipe == 1)
 	{
 		if (d_open_pipe(mshell, i) == 1)
 			return (1);
 		i++;
+	}
+	tmp2 = mshell->cmds;
+	while (tmp2)
+	{
+		if (!tmp2->cmd[0] && tmp2->next)
+			tmp2->cmd[0] = d_strdup("exit");
+		tmp2 = tmp2->next;
 	}
 	return (0);
 }

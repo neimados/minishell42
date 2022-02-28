@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 12:16:07 by dso               #+#    #+#             */
-/*   Updated: 2022/02/15 12:18:11 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 19:22:16 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,32 +58,4 @@ int	d_count_cmds(char **args)
 		i++;
 	}
 	return (count);
-}
-
-char	*d_trim_cmd(char *to_trim)
-{
-	int		i;
-	int		j;
-	int		count;
-	char	*str;
-
-	i = -1;
-	j = -1;
-	count = 0;
-	while (to_trim[++i])
-	{
-		if (to_trim[i] != '\'' && to_trim[i] != '\"')
-			count++;
-	}
-	str = d_calloc((count + 1), sizeof(char));
-	if (!str)
-		return (NULL);
-	i = -1;
-	while (to_trim[++i])
-	{
-		if (to_trim[i] != '\'' && to_trim[i] != '\"')
-			str[++j] = to_trim[i];
-	}
-	free(to_trim);
-	return (str);
 }

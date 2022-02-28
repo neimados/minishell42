@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/26 12:11:50 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 20:04:31 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ struct s_parsing
 	int		out;
 	int		end;
 	int		start;
+	int		sq;
+	int		dq;
 	char	*tmp;
 };
 
@@ -140,6 +142,7 @@ int		d_skip_vars3_hd(char *tmp, int i);
 int		d_skip_vars2_hd(char *tmp, int i);
 void	d_check_underscore(t_cmds *cmd, t_minishell *m);
 void	d_replace_underscore(t_minishell *m);
+char	*ft_strtrim(char const *s1, char const *set);
 
 // exec
 void	k_loop_forks(t_minishell *minishell);
@@ -172,7 +175,7 @@ void	k_child_dup(t_cmds *tmp, int in, int out);
 
 // builtin
 void	ft_pwd(char **cmds, t_minishell *mshell);
-void	ft_exit(t_minishell *mshell, char **cmds);
+void	ft_exit(t_minishell *mshell, char **cmds, int key);
 void	ft_env(char **cmds, t_minishell *mshell);
 void	ft_echo(char **cmds);
 void	ft_export(char **cmds, t_minishell *mshell);

@@ -6,11 +6,36 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 11:00:43 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 18:08:57 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 17:52:18 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	d_loop_echo2(char *cmd, int i)
+{
+	if (cmd[i] == '\'')
+	{
+		i++;
+		while (cmd[i] && cmd[i] != '\'')
+		{
+			printf("%c", cmd[i]);
+			i++;
+		}
+		i++;
+	}
+	else if (cmd[i] == '\"')
+	{
+		i++;
+		while (cmd[i] && cmd[i] != '\"')
+		{
+			printf("%c", cmd[i]);
+			i++;
+		}
+		i++;
+	}
+	return (i);
+}
 
 static void	d_loop_echo(char *cmd)
 {
@@ -19,15 +44,24 @@ static void	d_loop_echo(char *cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		if (cmd[i] != '\'' && cmd[i] != '\"')
+		if (cmd[i] == '\'' || cmd[i] == '\"')
+			i = d_loop_echo2(cmd, i);
+		else
+		{
 			printf("%c", cmd[i]);
-		i++;
+			i++;
+		}
 	}
 }
 
 static int	d_echo_n(char **cmds)
 {
-	if (cmds[1][0] == '-' && cmds[1][1] == 'n')
+	int	i;
+
+	i = 1;
+	while (cmds[1][0] == '-' && cmds[1][i] == 'n')
+		i++;
+	if (cmds[1][i] == '\0')
 		return (1);
 	return (0);
 }

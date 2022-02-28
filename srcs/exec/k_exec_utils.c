@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   k_exec_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 11:59:19 by dso               #+#    #+#             */
-/*   Updated: 2022/02/26 12:07:08 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 15:08:38 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	k_loop_forks_check(int nbcmd, t_minishell *m, t_cmds *tmp, int i)
 {
 	if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "exit", i))
 	{
-		ft_exit(m, tmp->cmd);
+		ft_exit(m, tmp->cmd, 0);
 		return (1);
 	}
 	else if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "export", i))
@@ -57,6 +57,7 @@ int	k_loop_forks_check(int nbcmd, t_minishell *m, t_cmds *tmp, int i)
 
 void	k_set_signals(int nbcmd, t_cmds *tmp, int i)
 {
+	d_free_tab(g_error);
 	g_error = d_calloc(3, sizeof(char *));
 	if (!g_error)
 		return ;
@@ -85,10 +86,13 @@ int	k_create_forks(int nbcmd, t_cmds *tmp, t_minishell *minishell, pid_t *forks)
 	i = 0;
 	while (i < nbcmd)
 	{
-		if (tmp->cmd[0])
+		if (tmp->cmd)
 		{
-			if (tmp->next && tmp->next->cmd[0])
-				pipe(tmp->next->pipe);
+			if (tmp->next)
+			{
+				if (pipe(tmp->next->pipe) == -1)
+					return (1);
+			}
 			forks[i] = fork();
 			if (forks[i] == 0)
 			{

@@ -18,7 +18,7 @@ SRC = ./srcs/minishell.c ./srcs/parsing/ft_parsing.c ./srcs/parsing/utils.c \
 ./srcs/exec/k_builtins.c ./srcs/exec/k_exec_utils2.c ./srcs/exec/k_child.c \
 ./srcs/exec/k_child_utils.c ./srcs/parsing/ft_heredoc_vars.c ./srcs/parsing/ft_heredoc_vars_utils.c \
 ./srcs/parsing/ft_underscore.c ./srcs/builtins/ft_cd_utils.c ./srcs/builtins/ft_cd_utils2.c \
-./srcs/builtins/ft_cd_utils3.c ./srcs/builtins/ft_cd_utils4.c
+./srcs/builtins/ft_cd_utils3.c ./srcs/builtins/ft_cd_utils4.c ./srcs/parsing/ft_strtrim.c
 
 OBJS = ${SRC:.c=.o}
 

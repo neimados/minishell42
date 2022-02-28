@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   k_builtins.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 11:58:40 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 15:34:14 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/26 14:45:26 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	k_exec_builtins(char **cmd, t_minishell *minishell)
 			ft_error(cmd[0], "No such file or directory");
 	}
 	else if (!d_strncmp(cmd[0], "exit", len))
-		ft_exit(minishell, cmd);
+		ft_exit(minishell, cmd, 1);
 }
 
 void	k_is_builtin_fct(char **cmd, t_minishell *minishell)
