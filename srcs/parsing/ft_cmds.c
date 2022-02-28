@@ -23,12 +23,6 @@ static char	*d_write_cmd(char *arg, t_parsing *p, t_cmds *c)
 	tmp = d_substr(arg, 0, j);
 	if (!tmp)
 		return (NULL);
-	// tmp = ft_strtrim(tmp, "\"");
-	// if (!tmp)
-	// 	return (NULL);
-	// tmp = ft_strtrim(tmp, "\'");
-	// if (!tmp)
-	// 	return (NULL);
 	c->cmd[k] = tmp;
 	if (!c->cmd[k])
 		return (NULL);
@@ -118,6 +112,8 @@ int	d_put_cmds(char **args, t_cmds *cmd)
 		}
 		p.i += 1;
 		p.j = 0;
+		p.sq = 0;
+		p.dq = 0;
 	}
 	return (0);
 }

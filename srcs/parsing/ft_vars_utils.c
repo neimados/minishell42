@@ -12,14 +12,29 @@
 
 #include "../../includes/minishell.h"
 
+int	d_check_path_length(char *env, int i)
+{
+	int	count;
+
+	count = 0;
+	while (env[i])
+	{
+		if (env[i] == '>' || env[i] == '<')
+			count += 2;
+		count++;
+		i++;
+	}
+	return (count + 1);
+}
+
 char	*d_check_path(char *variable, char *env)
 {
 	int		i;
-	int		start;
+	int		j;
 	char	*value;
 
 	i = 0;
-	start = 0;
+	j = -1;
 	while (variable[i])
 	{
 		if (variable[i] != env[i])
@@ -29,10 +44,19 @@ char	*d_check_path(char *variable, char *env)
 	if (env[i] != '=')
 		return (NULL);
 	i++;
-	start = i;
+	value = d_calloc(d_check_path_length(env, i), sizeof(char)); 
 	while (env[i])
+	{
+		if (env[i] == '>' || env[i] == '<')
+		{
+			value[++j] = '\'';
+			value[++j] = env[i];
+			value[++j] = '\'';
+		}
+		else
+			value[++j] = env[i];
 		i++;
-	value = d_substr(env, start, i - start);
+	}
 	return (value);
 }
 

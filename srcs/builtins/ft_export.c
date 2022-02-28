@@ -56,13 +56,13 @@ static void	d_loop_put_export(t_minishell *m, char *cmd, int exist, char **new)
 	while (m->g_mini_env[i])
 	{
 		if (exist != 0 && exist == i)
-			new[i] = d_strdup(cmd);
+			new[i] = d_export_quotes(cmd);
 		else
 			new[i] = d_strdup(m->g_mini_env[i]);
 		i++;
 	}
 	if (exist == 0)
-		new[i] = d_strdup(cmd);
+		new[i] = d_export_quotes(cmd);
 }
 
 static char	**d_put_export(char *cmd, t_minishell *mshell)

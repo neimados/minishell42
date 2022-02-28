@@ -104,7 +104,9 @@ void	ft_unset(char **cmds, t_minishell *mshell)
 	count = 0;
 	while (cmds[++i])
 	{
-		if (strlen(cmds[i]) != 1 && cmds[i][0] != '_')
+		if (strlen(cmds[i]) == 1 && cmds[i][0] == '_')
+			return ;
+		else
 		{
 			while (cmds[i][j])
 			{

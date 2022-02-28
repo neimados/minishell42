@@ -74,3 +74,89 @@ int	d_check_export(char *cmd)
 	}
 	return (0);
 }
+
+static int	d_export_quotes_len(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			i++;
+			while(str[i] && str[i] != '\'')
+			{
+				i++;
+				count++;
+			}
+			i++;
+		}
+		else if (str[i] == '\"')
+		{
+			i++;
+			while(str[i] && str[i] != '\"')
+			{
+				i++;
+				count++;
+			}
+			i++;
+		}
+		else
+		{
+			i++;
+			count++;
+		}
+	}
+	return (count);
+}
+
+char *d_export_quotes(char *str)
+{
+	int		length;
+	int		i;
+	int		j;
+	char	*new;
+
+	i = 0;
+	j = 0;
+	length = d_export_quotes_len(str);
+	new = malloc((length + 1) * sizeof(char));
+	if (!new)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			i++;
+			while(str[i] && str[i] != '\'')
+			{
+				new[j] = str[i];
+				j++;
+				i++;
+			}
+			i++;
+		}
+		else if (str[i] == '\"')
+		{
+			i++;
+			while(str[i] && str[i] != '\"')
+			{
+				new[j] = str[i];
+				i++;
+				j++;
+			}
+			i++;
+		}
+		else
+		{
+			new[j] = str[i];
+			i++;
+			j++;
+		}
+	}
+	new[j] = '\0';
+	return (new);
+}

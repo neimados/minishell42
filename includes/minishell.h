@@ -204,6 +204,7 @@ int		k_cd_oldpwd(t_minishell *minishell, char *old);
 int		k_cd_dash_loop(int j, t_minishell *m, int i);
 void	k_set_gerror(void);
 void	k_child_error_exit(t_cmds *tmp);
+char	*d_export_quotes(char *str);
 
 //signals
 void	ft_terminal(int echo);
