@@ -20,31 +20,26 @@ int	d_check_path_length(char *env, int i)
 	while (env[i])
 	{
 		if (env[i] == '>' || env[i] == '<')
-			count += 2;
-		count++;
-		i++;
+		{
+			count += 3;
+			i++;
+		}
+		else
+		{
+			count++;
+			i++;
+		}
 	}
 	return (count + 1);
 }
 
-char	*d_check_path(char *variable, char *env)
+static char	*d_check_path_fill(char *env, int i)
 {
-	int		i;
-	int		j;
 	char	*value;
+	int		j;
 
-	i = 0;
 	j = -1;
-	while (variable[i])
-	{
-		if (variable[i] != env[i])
-			return (NULL);
-		i++;
-	}
-	if (env[i] != '=')
-		return (NULL);
-	i++;
-	value = d_calloc(d_check_path_length(env, i), sizeof(char)); 
+	value = d_calloc(d_check_path_length(env, i), sizeof(char));
 	while (env[i])
 	{
 		if (env[i] == '>' || env[i] == '<')
@@ -60,12 +55,23 @@ char	*d_check_path(char *variable, char *env)
 	return (value);
 }
 
-char	*d_var_err(void)
+char	*d_check_path(char *variable, char *env)
 {
-	char	*var;
+	int		i;
+	char	*value;
 
-	var = d_strdup(g_error[0]);
-	return (var);
+	i = 0;
+	while (variable[i])
+	{
+		if (variable[i] != env[i])
+			return (NULL);
+		i++;
+	}
+	if (env[i] != '=')
+		return (NULL);
+	i++;
+	value = d_check_path_fill(env, i);
+	return (value);
 }
 
 char	*d_loop_vars3(char *tmp, int i, t_minishell *mshell, char *str)
@@ -95,21 +101,4 @@ char	*d_loop_vars3(char *tmp, int i, t_minishell *mshell, char *str)
 	}
 	free(variable);
 	return (str);
-}
-
-int	d_skip_vars3(char *tmp, int i)
-{
-	while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"' && tmp[i] != ' ')
-		i++;
-	return (i);
-}
-
-int	d_loop_vars_if(char *tmp, int i)
-{
-	i++;
-	while (tmp[i] && tmp[i] != '\'')
-		i++;
-	if (tmp[i])
-		i++;
-	return (i);
 }

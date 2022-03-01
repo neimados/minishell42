@@ -12,67 +12,23 @@
 
 #include "../../includes/minishell.h"
 
-static void	d_loop_print_declare(char *line)
+static int	d_export_quotes_len2(char *str, int i)
 {
-	int	i;
-
-	i = 0;
-	printf("declare -x ");
-	if (d_check_export(line) == 1)
+	if (str[i] == '\'')
 	{
-		while (line[i] != '=')
-		{
-			printf("%c", line[i]);
-			i++;
-		}
-		printf("%c\"", line[i]);
 		i++;
-		while (line[i])
-		{
-			printf("%c", line[i]);
+		while (str[i] && str[i] != '\'')
 			i++;
-		}
-		printf("\"\n");
-	}
-	else
-		printf("declare -x %s\n", line);
-}
-
-void	d_print_declare_export(t_minishell *mshell)
-{
-	int	i;
-	int	exist;
-
-	i = -1;
-	exist = 0;
-	while (mshell->g_mini_env[++i])
-	{
-		if (mshell->g_mini_env[i][0] == 'O' && mshell->g_mini_env[i][1] == 'L'
-		&& mshell->g_mini_env[i][2] == 'D' && mshell->g_mini_env[i][3] == 'P'
-		&& mshell->g_mini_env[i][4] == 'W' && mshell->g_mini_env[i][5] == 'D'
-		&& mshell->g_mini_env[i][6] == '=')
-			exist = 1;
-	}
-	i = -1;
-	while (mshell->g_mini_env[++i])
-		d_loop_print_declare(mshell->g_mini_env[i]);
-	if (exist == 0)
-		printf("declare -x OLDPWD\n");
-	return ;
-}
-
-int	d_check_export(char *cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] == '=')
-			return (1);
 		i++;
 	}
-	return (0);
+	else if (str[i] == '\"')
+	{
+		i++;
+		while (str[i] && str[i] != '\"')
+			i++;
+		i++;
+	}
+	return (i);
 }
 
 static int	d_export_quotes_len(char *str)
@@ -84,25 +40,10 @@ static int	d_export_quotes_len(char *str)
 	count = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == '\'' || str[i] == '\"')
 		{
-			i++;
-			while(str[i] && str[i] != '\'')
-			{
-				i++;
-				count++;
-			}
-			i++;
-		}
-		else if (str[i] == '\"')
-		{
-			i++;
-			while(str[i] && str[i] != '\"')
-			{
-				i++;
-				count++;
-			}
-			i++;
+			i = d_export_quotes_len2(str, i);
+			count += (i - 2);
 		}
 		else
 		{
@@ -113,7 +54,33 @@ static int	d_export_quotes_len(char *str)
 	return (count);
 }
 
-char *d_export_quotes(char *str)
+static char	*d_export_quotes_loop(char *str, int length, int i, int j)
+{
+	char	*new;
+
+	new = d_calloc(length, sizeof(char));
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] && str[i] != '\'')
+				new[++j] = str[i++];
+		}
+		else if (str[i] == '\"')
+		{
+			i++;
+			while (str[i] && str[i] != '\"')
+				new[++j] = str[i++];
+		}
+		else
+			new[++j] = str[i];
+		i++;
+	}
+	return (new);
+}
+
+char	*d_export_quotes(char *str)
 {
 	int		length;
 	int		i;
@@ -121,42 +88,10 @@ char *d_export_quotes(char *str)
 	char	*new;
 
 	i = 0;
-	j = 0;
-	length = d_export_quotes_len(str);
-	new = malloc((length + 1) * sizeof(char));
+	j = -1;
+	length = d_export_quotes_len(str) + 1;
+	new = d_export_quotes_loop(str, length, i, j);
 	if (!new)
 		return (NULL);
-	while (str[i])
-	{
-		if (str[i] == '\'')
-		{
-			i++;
-			while(str[i] && str[i] != '\'')
-			{
-				new[j] = str[i];
-				j++;
-				i++;
-			}
-			i++;
-		}
-		else if (str[i] == '\"')
-		{
-			i++;
-			while(str[i] && str[i] != '\"')
-			{
-				new[j] = str[i];
-				i++;
-				j++;
-			}
-			i++;
-		}
-		else
-		{
-			new[j] = str[i];
-			i++;
-			j++;
-		}
-	}
-	new[j] = '\0';
 	return (new);
 }

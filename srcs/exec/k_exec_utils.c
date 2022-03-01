@@ -67,7 +67,8 @@ void	k_set_signals(int nbcmd, t_cmds *tmp, int i)
 		ft_terminal(2);
 		signal(SIGINT, sigint_handler_spec);
 	}
-	else if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "./minishell", i))
+	else if (nbcmd == 1 && (!d_strncmp(tmp->cmd[0], "./minishell", i)
+			|| !d_strncmp(tmp->cmd[0], "bash", i)))
 	{
 		ft_terminal(0);
 		signal(SIGINT, sigint_handler_minishell);

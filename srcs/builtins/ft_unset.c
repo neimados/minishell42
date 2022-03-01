@@ -100,7 +100,7 @@ void	ft_unset(char **cmds, t_minishell *mshell)
 	int	count;
 
 	i = 0;
-	j = 0;
+	j = -1;
 	count = 0;
 	while (cmds[++i])
 	{
@@ -108,17 +108,14 @@ void	ft_unset(char **cmds, t_minishell *mshell)
 			return ;
 		else
 		{
-			while (cmds[i][j])
-			{
+			while (cmds[i][++j])
 				if (cmds[i][j] != '\'' && cmds[i][j] != '\"')
 					count++;
-				j++;
-			}
 			if (count != 0)
 				if (d_put_unset(count, cmds[i], mshell) == 1)
 					return ;
 		}
-		j = 0;
+		j = -1;
 		count = 0;
 	}
 	return ;

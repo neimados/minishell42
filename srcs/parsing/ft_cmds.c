@@ -29,17 +29,6 @@ static char	*d_write_cmd(char *arg, t_parsing *p, t_cmds *c)
 	return (c->cmd[k]);
 }
 
-static void	d_init_struct_parsing(t_parsing *p)
-{
-	p->i = 0;
-	p->j = 0;
-	p->k = 0;
-	p->l = 0;
-	p->sign = 0;
-	p->sq = 0;
-	p->dq = 0;
-}
-
 static int	d_skip_cmds(t_parsing *p, char *arg)
 {
 	int	j;

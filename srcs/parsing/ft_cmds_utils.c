@@ -59,3 +59,14 @@ int	d_count_cmds(char **args)
 	}
 	return (count);
 }
+
+void	d_init_struct_parsing(t_parsing *p)
+{
+	p->i = 0;
+	p->j = 0;
+	p->k = 0;
+	p->l = 0;
+	p->sign = 0;
+	p->sq = 0;
+	p->dq = 0;
+}

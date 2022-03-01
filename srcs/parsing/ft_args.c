@@ -18,7 +18,8 @@ static int	d_loop_args2(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 
 	end = p->end;
 	p->start = p->i;
-	while (arg[p->i] && arg[p->i] != '>' && arg[p->i] != '<')
+	while (arg[p->i] && arg[p->i] != '>' && arg[p->i] != '<'
+		&& arg[p->i] != '\'' && arg[p->i] != '\"')
 		p->i += 1;
 	if (p->in != 0)
 	{
