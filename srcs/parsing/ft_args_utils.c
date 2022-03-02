@@ -18,7 +18,7 @@ static	int	d_args_out2(t_cmds *cmd, char *tmp)
 		return (1);
 	if (cmd->outfile)
 		free(cmd->outfile);
-	cmd->outfile = tmp;
+	cmd->outfile = d_write_cmd_trim(tmp);
 	if (!cmd->outfile)
 		return (1);
 	return (0);
@@ -86,7 +86,7 @@ int	d_args_in(char *arg, t_cmds *cmd, t_minishell *mshell, t_parsing *p)
 			return (-1);
 		if (cmd->infile)
 			free(cmd->infile);
-		cmd->infile = tmp;
+		cmd->infile = d_write_cmd_trim(tmp);
 		p->fd = open(cmd->infile, O_RDONLY);
 		if (p->fd == -1)
 			end = 1;
@@ -98,4 +98,23 @@ int	d_args_in(char *arg, t_cmds *cmd, t_minishell *mshell, t_parsing *p)
 			return (-1);
 	}
 	return (end);
+}
+
+int	d_loop_args_quotes(char *arg, int i)
+{
+	if (arg[i] == '\'')
+	{
+		i++;
+		while (arg[i] && arg[i] != '\'')
+			i++;
+		i++;
+	}
+	else if (arg[i] == '\"')
+	{
+		i++;
+		while (arg[i] && arg[i] != '\"')
+			i++;
+		i++;
+	}
+	return (i);
 }

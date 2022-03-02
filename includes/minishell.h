@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 20:04:31 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/01 13:26:55 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,9 @@ int		d_skip_vars2_hd(char *tmp, int i);
 void	d_check_underscore(t_cmds *cmd, t_minishell *m);
 void	d_replace_underscore(t_minishell *m);
 char	*ft_strtrim(char const *s1, char const *set);
+char	*d_write_cmd_trim(char *tmp);
+int		d_loop_args_quotes(char *arg, int i);
+int		d_put_cmds2_else(int sign, int k);
 
 // exec
 void	k_loop_forks(t_minishell *minishell);
@@ -206,6 +209,7 @@ void	k_set_gerror(void);
 void	k_child_error_exit(t_cmds *tmp);
 char	*d_export_quotes(char *str);
 void	d_init_struct_parsing(t_parsing *p);
+int		k_cd_others2(char *tmp, char **cmds, t_minishell *minishell);
 
 //signals
 void	ft_terminal(int echo);

@@ -6,36 +6,63 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 12:16:07 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 19:22:16 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/01 13:02:49 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	d_loop_count_cmds(char *arg)
+static int	d_loop_count_cmds2(char *arg, int i)
 {
-	int	sign;
-	int	count;
-	int	i;
-
-	sign = 0;
-	count = 0;
-	i = 0;
-	while (arg[i])
+	if (arg[i] == '\'')
 	{
-		if (arg[i] == '>' || arg[i] == '<')
-		{
-			sign++;
+		i++;
+		while (arg[i] && arg[i] != '\'')
 			i++;
+		i++;
+	}
+	else if (arg[i] == '\"')
+	{
+		i++;
+		while (arg[i] && arg[i] != '\"')
+			i++;
+		i++;
+	}
+	return (i);
+}
+
+static int	d_loop_count_cmds3(char *arg, int j)
+{
+	while (arg[j] && (arg[j] != '>' && arg[j] != '<'
+			&& arg[j] != '\'' && arg[j] != '\"'))
+		j++;
+	return (j);
+}
+
+static int	d_loop_count_cmds(char *arg, int *sign, int j)
+{
+	int	count;
+
+	count = 0;
+	while (arg[j])
+	{
+		if (arg[j] == '\'' || arg[j] == '\"')
+		{
+			j = d_loop_count_cmds2(arg, j);
+			count++;
+		}
+		else if (arg[j] == '>' || arg[j] == '<')
+		{
+			*sign += 1;
+			j++;
 		}
 		else
 		{
-			if (sign == 0)
+			if (*sign == 0)
 				count++;
 			else
-				sign = 0;
-			while (arg[i] && (arg[i] != '>' && arg[i] != '<'))
-				i++;
+				*sign = 0;
+			j = d_loop_count_cmds3(arg, j);
 		}
 	}
 	return (count);
@@ -54,7 +81,7 @@ int	d_count_cmds(char **args)
 	count = 0;
 	while (args[i])
 	{
-		count += d_loop_count_cmds(args[i]);
+		count += d_loop_count_cmds(args[i], &sign, j);
 		i++;
 	}
 	return (count);

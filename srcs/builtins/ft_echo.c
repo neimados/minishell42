@@ -12,31 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-static int	d_loop_echo2(char *cmd, int i)
-{
-	if (cmd[i] == '\'')
-	{
-		i++;
-		while (cmd[i] && cmd[i] != '\'')
-		{
-			printf("%c", cmd[i]);
-			i++;
-		}
-		i++;
-	}
-	else if (cmd[i] == '\"')
-	{
-		i++;
-		while (cmd[i] && cmd[i] != '\"')
-		{
-			printf("%c", cmd[i]);
-			i++;
-		}
-		i++;
-	}
-	return (i);
-}
-
 static void	d_loop_echo(char *cmd)
 {
 	int	i;
@@ -44,13 +19,8 @@ static void	d_loop_echo(char *cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		if (cmd[i] == '\'' || cmd[i] == '\"')
-			i = d_loop_echo2(cmd, i);
-		else
-		{
-			printf("%c", cmd[i]);
-			i++;
-		}
+		printf("%c", cmd[i]);
+		i++;
 	}
 }
 

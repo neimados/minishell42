@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 16:59:47 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/01 12:08:24 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 static void	d_free_end(t_minishell *mshell, char *input)
 {
 	t_cmds	*test;
+	int		i;
 
+	i = 0;
 	test = mshell->cmds;
 	while (test != NULL)
 	{
-		d_free_tab(test->cmd);
+		if (test->cmd)
+			d_free_tab(test->cmd);
 		if (test->infile)
 			free(test->infile);
 		if (test->outfile)

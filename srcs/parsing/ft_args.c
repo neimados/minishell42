@@ -6,11 +6,18 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 18:59:26 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/01 13:19:44 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	d_loop_args2_loop(char *arg, int i)
+{
+	while (arg[i] && arg[i] != '>' && arg[i] != '<')
+		i++;
+	return (i);
+}
 
 static int	d_loop_args2(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 {
@@ -18,11 +25,9 @@ static int	d_loop_args2(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 
 	end = p->end;
 	p->start = p->i;
-	while (arg[p->i] && arg[p->i] != '>' && arg[p->i] != '<'
-		&& arg[p->i] != '\'' && arg[p->i] != '\"')
-		p->i += 1;
 	if (p->in != 0)
 	{
+		p->i = d_loop_args2_loop(arg, p->i);
 		end = d_args_in(arg, c, m, p);
 		if (end == -1)
 			return (-1);
@@ -30,31 +35,17 @@ static int	d_loop_args2(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 	}
 	else if (p->out != 0)
 	{
+		p->i = d_loop_args2_loop(arg, p->i);
 		end = d_args_out(arg, c, m, p);
 		if (end == -1)
 			return (-1);
 		p->out = 0;
 	}
+	else
+		while (arg[p->i] && arg[p->i] != '>' && arg[p->i] != '<'
+			&& arg[p->i] != '\'' && arg[p->i] != '\"')
+			p->i += 1;
 	return (end);
-}
-
-static int	d_loop_args_quotes(char *arg, int i)
-{
-	if (arg[i] == '\'')
-	{
-		i++;
-		while (arg[i] && arg[i] != '\'')
-			i++;
-		i++;
-	}
-	else if (arg[i] == '\"')
-	{
-		i++;
-		while (arg[i] && arg[i] != '\"')
-			i++;
-		i++;
-	}
-	return (i);
 }
 
 static int	d_loop_args(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
@@ -86,24 +77,33 @@ static int	d_loop_args(t_minishell *m, t_cmds *c, char *arg, t_parsing *p)
 	return (end);
 }
 
-static int	d_args_return(char **args, t_cmds *c)
+static int	d_args_return(char **args, t_cmds *c, int end)
 {
 	if (d_put_cmds(args, c) == 1)
 		return (1);
+	if (!c->cmd[0] && end == 1 && c->infile)
+	{
+		d_putstr_fd("minishell: ", 2);
+		d_putstr_fd(c->infile, 2);
+		d_putstr_fd(": No such file or directory\n", 2);
+	}
 	return (0);
 }
 
 int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 {
 	int			i;
+	int			length;
 	t_parsing	p;
 
 	i = 0;
 	p.end = 0;
 	p.in = 0;
 	p.out = 0;
+	length = d_count_cmds(args);
 	p.tmp = heredoc;
-	cmd->cmd = d_calloc((d_count_cmds(args) + 1), sizeof(char *));
+	cmd->cmd = d_calloc((length + 1), sizeof(char *));
+	cmd->cmd[0] = NULL;
 	if (!cmd->cmd)
 		return (1);
 	while (args[i])
@@ -114,5 +114,5 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 			return (1);
 		i++;
 	}
-	return (d_args_return(args, cmd));
+	return (d_args_return(args, cmd, p.end));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_utils3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 12:43:55 by dso               #+#    #+#             */
-/*   Updated: 2022/02/23 18:18:03 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/28 21:13:45 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,13 @@ int	k_cd_others(t_minishell *minishell, int j, char **cmds, char *tmp)
 		tmp = ft_strjoin(minishell->pwd, "/");
 	if (!tmp)
 		return (1);
-	if (cmds[1][ft_strlen(cmds[1]) - 1] == '/' && ft_strlen(cmds[1]) != 1)
-	{
-		tmp = d_strjoin(tmp, cmds[1]);
-		minishell->pwd = d_substr(tmp, 0, d_strlen(tmp) - 1);
-	}
-	else
-		minishell->pwd = ft_strjoin(tmp, cmds[1]);
-	if (!minishell->pwd)
+	if (k_cd_others2(tmp, cmds, minishell) == 1)
 		return (1);
 	if (j != -1)
 	{
 		minishell->g_mini_env[j] = ft_strjoin("PWD=", minishell->pwd);
 		if (!minishell->g_mini_env[j])
 			return (1);
-		free(tmp);
 	}
 	return (0);
 }
