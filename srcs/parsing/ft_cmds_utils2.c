@@ -50,32 +50,32 @@ static int	d_write_count_cmd(char *tmp)
 			count++;
 		i++;
 	}
+	printf("COUNT %d\n", count);
 	return (count + 1);
 }
 
-static int	d_write_cmd_trim_loop(char *tmp, char *new, int i, int j)
+static void	d_write_cmd_trim_loop(char *tmp, char *new, int *i, int *j)
 {
-	if (tmp[i] == '\'')
+	if (tmp[*i] == '\'')
 	{
-		i++;
-		while (tmp[i] && tmp[i] != '\'')
+		*i += 1;
+		while (tmp[*i] && tmp[*i] != '\'')
 		{
-			new[j] = tmp[i];
-			j++;
-			i++;
+			new[*j] = tmp[*i];
+			*j += 1;
+			*i += 1;
 		}
 	}
-	else if (tmp[i] == '\"')
+	else if (tmp[*i] == '\"')
 	{
-		i++;
-		while (tmp[i] && tmp[i] != '\"')
+		*i += 1;
+		while (tmp[*i] && tmp[*i] != '\"')
 		{
-			new[j] = tmp[i];
-			j++;
-			i++;
+			new[*j] = tmp[*i];
+			*j += 1;
+			*i += 1;
 		}
 	}
-	return (j);
 }
 
 char	*d_write_cmd_trim(char *tmp)
@@ -92,10 +92,7 @@ char	*d_write_cmd_trim(char *tmp)
 	while (tmp[i])
 	{
 		if (tmp[i] == '\'' || tmp[i] == '\"')
-		{
-			j = d_write_cmd_trim_loop(tmp, new, i, j);
-			i = j + 1;
-		}
+			d_write_cmd_trim_loop(tmp, new, &i, &j);
 		else
 		{
 			new[j] = tmp[i];

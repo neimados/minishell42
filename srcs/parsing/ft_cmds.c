@@ -24,6 +24,7 @@ static char	*d_write_cmd(char *arg, t_parsing *p, t_cmds *c)
 	if (!tmp)
 		return (NULL);
 	c->cmd[k] = d_write_cmd_trim(tmp);
+	printf("SUBSTR %s\n", tmp);
 	if (!c->cmd[k])
 		return (NULL);
 	return (c->cmd[k]);
