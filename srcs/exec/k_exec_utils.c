@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   k_exec_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 11:59:19 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 15:08:38 by kmammeri         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:28:43 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,6 @@ int	k_loop_forks_check(int nbcmd, t_minishell *m, t_cmds *tmp, int i)
 
 void	k_set_signals(int nbcmd, t_cmds *tmp, int i)
 {
-	d_free_tab(g_error);
-	g_error = d_calloc(3, sizeof(char *));
-	if (!g_error)
-		return ;
-	g_error[0] = d_strdup("0");
 	if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "cat", i))
 	{
 		ft_terminal(2);

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:09 by dso               #+#    #+#             */
-/*   Updated: 2022/03/01 13:20:40 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/03 11:31:45 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,16 @@ static int	d_parsing_args(t_minishell *mshell, t_cmds *cmd, char *tmp, int i)
 	return (0);
 }
 
+static void	d_parsing_pipe_if(t_cmds *tmp2)
+{
+	free(tmp2->cmd);
+	tmp2->cmd = d_calloc(3, sizeof(char *));
+	tmp2->cmd[0] = d_strdup("echo");
+	tmp2->cmd[1] = d_strdup("-n");
+	free(g_error[0]);
+	g_error[0] = d_strdup("1");
+}
+
 static int	d_parsing_pipe(t_minishell *mshell, int i, char **tmp)
 {
 	t_cmds	*tmp2;
@@ -50,16 +60,16 @@ static int	d_parsing_pipe(t_minishell *mshell, int i, char **tmp)
 			return (1);
 		i++;
 	}
+	d_free_tab(g_error);
+	g_error = d_calloc(3, sizeof(char *));
+	if (!g_error)
+		return (1);
+	g_error[0] = d_strdup("0");
 	tmp2 = mshell->cmds;
 	while (tmp2)
 	{
-		if (!tmp2->cmd[0] && tmp2->next)
-		{
-			free(tmp2->cmd);
-			tmp2->cmd = d_calloc(3, sizeof(char *));
-			tmp2->cmd[0] = d_strdup("echo");
-			tmp2->cmd[1] = d_strdup("-n");
-		}
+		if (!tmp2->cmd[0])
+			d_parsing_pipe_if(tmp2);
 		tmp2 = tmp2->next;
 	}
 	return (0);

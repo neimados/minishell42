@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 16:32:08 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 20:04:51 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/02 18:33:56 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	d_loop_print_declare(char *line)
 		printf("\"\n");
 	}
 	else
-		printf("declare -x %s\n", line);
+		printf("%s\n", line);
 }
 
 void	d_print_declare_export(t_minishell *mshell)

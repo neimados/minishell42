@@ -1,47 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_parsing_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/03/03 10:51:24 by dso              ###   ########.fr       */
+/*   Created: 2022/03/03 11:24:01 by dso               #+#    #+#             */
+/*   Updated: 2022/03/03 11:27:37 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	d_check_env_line(char *line)
+int	d_check_quotes_loop(char *input, int i, t_minishell *mshell)
 {
-	int	i;
-
-	i = 0;
-	while (line[i])
+	if (input[i] == '\'')
 	{
-		if (line[i] == '=')
-			return (1);
+		mshell->nb_sq += 1;
 		i++;
+		while (input[i] && input[i] != '\'')
+			i++;
+		if (input[i] == '\'')
+		{
+			mshell->nb_sq += 1;
+			i++;
+		}
 	}
-	return (0);
-}
-
-void	ft_env(char **cmds, t_minishell *mshell)
-{
-	int	i;
-
-	i = 0;
-	if (cmds[1])
+	else if (input[i] == '\"')
 	{
-		printf("env: %s: No such file or directory\n", cmds[1]);
-		exit(127);
-	}
-	d_replace_underscore(mshell);
-	while (mshell->g_mini_env[i])
-	{
-		if (d_check_env_line(mshell->g_mini_env[i]) == 1)
-			printf("%s\n", mshell->g_mini_env[i]);
+		mshell->nb_dq += 1;
 		i++;
+		while (input[i] && input[i] != '\"')
+			i++;
+		if (input[i] == '\"')
+		{
+			mshell->nb_dq += 1;
+			i++;
+		}
 	}
-	exit(EXIT_SUCCESS);
+	return (i);
 }

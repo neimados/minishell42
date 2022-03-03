@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   k_child.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 15:49:50 by dso               #+#    #+#             */
-/*   Updated: 2022/02/26 12:47:35 by kmammeri         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:28:29 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	k_child_infile(t_cmds *tmp, int i)
 		if (fd_in == -1)
 		{
 			k_set_gerror();
-			ft_error(strerror(errno), tmp->infile);
+			ft_error(tmp->infile, strerror(errno));
 		}
 		if (dup2(fd_in, STDIN_FILENO) == -1)
 			ft_error(strerror(errno), NULL);

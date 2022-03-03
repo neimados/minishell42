@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 11:00:43 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 17:52:18 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/03 10:20:22 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,19 @@ static void	d_loop_echo(char *cmd)
 static int	d_echo_n(char **cmds)
 {
 	int	i;
+	int	j;
 
 	i = 1;
-	while (cmds[1][0] == '-' && cmds[1][i] == 'n')
+	while (cmds[i])
+	{
+		j = 1;
+		while (cmds[i][0] == '-' && cmds[i][j] == 'n')
+			j++;
+		if (cmds[i][j] != '\0' || d_strlen(cmds[i]) == 1)
+			return (i);
 		i++;
-	if (cmds[1][i] == '\0')
-		return (1);
-	return (0);
+	}
+	return (i);
 }
 
 static void	d_check_echo(void)
@@ -51,12 +57,11 @@ void	ft_echo(char **cmds)
 	i = 1;
 	if (!cmds[1])
 		d_check_echo();
-	n = d_echo_n(cmds);
+	i = d_echo_n(cmds);
+	n = i;
 	size = d_count_tab(cmds);
 	if (size == 1)
 		exit(EXIT_SUCCESS);
-	if (n == 1)
-		i = 2;
 	while (cmds[i])
 	{
 		d_loop_echo(cmds[i]);
@@ -64,7 +69,7 @@ void	ft_echo(char **cmds)
 		if (i < size)
 			printf(" ");
 	}
-	if (n == 0)
+	if (n <= 1)
 		printf("\n");
 	exit(EXIT_SUCCESS);
 }

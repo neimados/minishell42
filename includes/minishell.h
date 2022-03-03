@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/03/01 13:26:55 by kmammeri         ###   ########.fr       */
+/*   Updated: 2022/03/03 11:26:36 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*d_write_cmd_trim(char *tmp);
 int		d_loop_args_quotes(char *arg, int i);
 int		d_put_cmds2_else(int sign, int k);
+int		d_check_quotes_loop(char *input, int i, t_minishell *mshell);
 
 // exec
 void	k_loop_forks(t_minishell *minishell);

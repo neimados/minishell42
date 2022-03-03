@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 14:37:42 by dso               #+#    #+#             */
-/*   Updated: 2022/02/25 15:41:05 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/02 14:29:53 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ void	k_join_cmd(char **path, char **cmd)
 	i = 0;
 	while (path && path[i])
 	{
-		path[i] = ft_strjoin(path[i], "/");
+		path[i] = d_strjoin(path[i], "/");
 		if (!path[i])
 		{
 			d_free_tab(path);
 			d_putstr_fd("malloc path failed\n", 2);
 			exit(EXIT_FAILURE);
 		}
-		path[i] = ft_strjoin(path[i], cmd[0]);
+		path[i] = d_strjoin(path[i], cmd[0]);
 		if (!path[i])
 		{
 			d_free_tab(path);

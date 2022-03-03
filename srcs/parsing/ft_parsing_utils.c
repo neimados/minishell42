@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:13:17 by dso               #+#    #+#             */
-/*   Updated: 2022/02/28 17:51:04 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/03 11:28:44 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,10 @@ int	d_check_quotes(char *input, t_minishell *mshell)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '\'' && mshell->nb_dq == 0)
-			mshell->nb_sq += 1;
-		else if (input[i] == '\"' && mshell->nb_sq == 0)
-			mshell->nb_dq += 1;
-		i++;
+		if (input[i] == '\'' || input[i] == '\"')
+			i = d_check_quotes_loop(input, i, mshell);
+		else
+			i++;
 	}
 	if (mshell->nb_sq % 2 != 0 || mshell->nb_dq % 2 != 0)
 	{

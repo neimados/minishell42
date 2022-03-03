@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   k_child_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 15:49:26 by dso               #+#    #+#             */
-/*   Updated: 2022/02/26 14:08:12 by kmammeri         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:29:39 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,5 @@ void	k_set_gerror(void)
 void	k_child_error_exit(t_cmds *tmp)
 {
 	k_set_gerror();
-	ft_error(strerror(errno), tmp->infile);
+	ft_error(tmp->infile, strerror(errno));
 }

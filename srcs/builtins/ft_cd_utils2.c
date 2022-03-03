@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 12:40:58 by dso               #+#    #+#             */
-/*   Updated: 2022/02/23 18:02:46 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/02 15:02:47 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ int	k_cd_user2(int i, t_minishell *m, int j)
 int	k_cd_user(t_minishell *m, int j)
 {
 	int		i;
+	int		k;
 
 	i = 0;
+	k = 0;
 	while (m->g_mini_env[i])
 	{
 		if (!ft_strncmp(m->g_mini_env[i], "HOME=", 5))
@@ -43,8 +45,14 @@ int	k_cd_user(t_minishell *m, int j)
 				free(m->g_mini_env[j]);
 			if (k_cd_user2(i, m, j) == 1)
 				return (1);
+			k = 1;
 		}
 		i++;
+	}
+	if (k == 0)
+	{
+		write(2, "minishell: cd: HOME not set\n", 28);
+		return (1);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/03/01 12:08:24 by dso              ###   ########.fr       */
+/*   Updated: 2022/03/03 10:49:34 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 static void	d_free_end(t_minishell *mshell, char *input)
 {
 	t_cmds	*test;
-	int		i;
 
-	i = 0;
 	test = mshell->cmds;
 	while (test != NULL)
 	{
@@ -75,7 +73,7 @@ int	main(int argc, char **argv, char **envp)
 	mshell = malloc(sizeof(t_minishell));
 	if (!mshell)
 		exit(EXIT_FAILURE);
-	g_error = d_calloc(3, sizeof(char *));
+	g_error = d_calloc(2, sizeof(char *));
 	if (!g_error)
 		exit(EXIT_FAILURE);
 	g_error[0] = d_strdup("0");
