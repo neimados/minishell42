@@ -50,7 +50,6 @@ static int	d_write_count_cmd(char *tmp)
 			count++;
 		i++;
 	}
-	printf("COUNT %d\n", count);
 	return (count + 1);
 }
 

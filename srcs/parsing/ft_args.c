@@ -14,7 +14,7 @@
 
 static int	d_loop_args2_loop(char *arg, int i)
 {
-	while (arg[i])
+	while (arg[i] && arg[i] != '<' && arg[i] != '>')
 			i++;
 	return (i);
 }
@@ -95,6 +95,7 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 	p.in = 0;
 	p.out = 0;
 	length = d_count_cmds(args);
+	printf("LENGTH %d\n", length);
 	p.tmp = heredoc;
 	cmd->cmd = d_calloc((length + 1), sizeof(char *));
 	cmd->cmd[0] = NULL;
